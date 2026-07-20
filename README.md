@@ -1,4 +1,4 @@
-<![CDATA[<h1 align="center">🛡️ Network Security MLOps — Cloud-Native DevSecOps Platform</h1>
+correct my read me .md ffile <![CDATA[<h1 align="center">🛡️ Automated Cyber Threat Detection System — MLOps & Cloud-Native DevSecOps Platform</h1>
 
 <p align="center">
   An end-to-end <b>MLOps + DevSecOps + GitOps</b> platform for detecting malicious URLs using Machine Learning,<br/>
@@ -12,7 +12,7 @@
 - [Project Overview](#-project-overview)
 - [Architecture](#-architecture)
 - [Technology Stack](#-technology-stack)
-- [ML/MLOps Pipeline](#-mlmlops-pipeline)
+- [ML & MLOps Pipeline](#-ml--mlops-pipeline)
 - [Prerequisites](#-prerequisites)
 - [Quick Start — Local Development](#-quick-start--local-development)
 - [Infrastructure Deployment (Terraform)](#-infrastructure-deployment-terraform)
@@ -115,7 +115,7 @@ graph TB
 
 ---
 
-## 🧠 ML/MLOps Pipeline
+## 🧠 ML & MLOps Pipeline
 
 1. **Data Ingestion** — Fetch from MongoDB → Feature store → Train/test split
 2. **Data Validation** — Schema checks, data drift detection (KS test)
@@ -144,12 +144,13 @@ graph TB
 
 ```bash
 # Clone
-git clone https://github.com/<YOUR_GITHUB_USERNAME>/network-security-mlops.git
-cd network-security-mlops
+git clone https://github.com/Rohit001001/Automated-Cyber-Threat-Detection-System-with-AI-MLOps.git
+cd Automated-Cyber-Threat-Detection-System-with-AI-MLOps
 
 # Configure environment
 cp .env.example .env
-# Edit .env with your MongoDB URL, AWS credentials, etc.
+# Edit .env with the required local environment values.
+# Never commit .env or credentials to Git.
 
 # Run with Docker Compose
 docker compose up --build
@@ -304,11 +305,11 @@ docker system prune -af
 ## 📜 Attribution & Contributions
 
 ### Original Project
-This project is based on the **Automated Cyber Threat Detection System with AI & MLOps** by [Aman Agnihotri](https://github.com/its-amann). The original ML pipeline, feature extraction, model training, FastAPI/Streamlit serving, Airflow orchestration, and MLflow integration were created by the original author.
+This repository extends the **Automated Cyber Threat Detection System with AI & MLOps** originally developed by Aman Agnihotri. The original ML pipeline, feature extraction, model training, FastAPI/Streamlit serving, Airflow orchestration, and MLflow integration were created by the original author.
 
 ### Engineering Enhancements by Rohit
 
-The following production-grade DevOps/Cloud/DevSecOps enhancements were built on top of the original ML application:
+The following DevOps, Cloud, GitOps, security, and observability enhancements were added on top of the original ML application:
 
 | Enhancement | Description |
 |---|---|
@@ -326,4 +327,3 @@ The following production-grade DevOps/Cloud/DevSecOps enhancements were built on
 | **AWS CloudWatch** | Infrastructure monitoring and alerting |
 | **Production Dockerfile** | Multi-stage build, non-root user, health checks |
 | **Security Hardening** | Removed hardcoded credentials, comprehensive .gitignore, K8s security contexts |
-]]>
