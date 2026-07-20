@@ -1,0 +1,115 @@
+# =============================================================================
+# Default values for network-security-mlops Helm chart
+# =============================================================================
+
+replicaCount: 2
+
+image:
+  repository: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/network-security-mlops-dev
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# --- Pod Security ---
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1000
+
+# --- Service ---
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+# --- Ingress ---
+ingress:
+  enabled: false
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# --- Resources ---
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+# --- Health Probes ---
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 15
+  periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# --- Autoscaling ---
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+# --- Environment Variables ---
+env:
+  MONGO_DB_URL: ""
+  AWS_DEFAULT_REGION: "us-east-1"
+  BUCKET_NAME: "networksecurity3"
+  PREDICTION_BUCKET_NAME: "network-security-prediction"
+  MLFLOW_TRACKING_URI: ""
+
+# --- Argo Rollouts ---
+rollouts:
+  enabled: false
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 60s }
+        - setWeight: 25
+        - pause: { duration: 60s }
+        - setWeight: 50
+        - pause: { duration: 120s }
+        - setWeight: 100
+
+# --- Prometheus Monitoring ---
+metrics:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    interval: 30s

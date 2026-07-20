@@ -1,0 +1,12 @@
+Network Security MLOps has been deployed!
+
+Get the application URL:
+{{- if .Values.ingress.enabled }}
+  Visit: http{{ if $.Values.ingress.tls }}s{{ end }}://{{ (index .Values.ingress.hosts 0).host }}
+{{- else }}
+  kubectl port-forward svc/{{ include "network-security-mlops.fullname" . }} 8080:{{ .Values.service.port }} -n {{ .Release.Namespace }}
+  Then visit: http://localhost:8080
+{{- end }}
+
+Health check:  curl http://localhost:8080/health
+API docs:      http://localhost:8080/docs

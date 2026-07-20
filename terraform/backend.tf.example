@@ -1,0 +1,19 @@
+# =============================================================================
+# Remote State Backend — TEMPLATE
+# =============================================================================
+# To use remote state:
+#   1. Create an S3 bucket and DynamoDB table for state locking
+#   2. Copy this file to backend.tf
+#   3. Replace placeholder values
+#   4. Run: terraform init -migrate-state
+# =============================================================================
+
+# terraform {
+#   backend "s3" {
+#     bucket         = "<YOUR_TERRAFORM_STATE_BUCKET>"
+#     key            = "network-security-mlops/terraform.tfstate"
+#     region         = "us-east-1"
+#     dynamodb_table = "<YOUR_DYNAMODB_LOCK_TABLE>"
+#     encrypt        = true
+#   }
+# }
