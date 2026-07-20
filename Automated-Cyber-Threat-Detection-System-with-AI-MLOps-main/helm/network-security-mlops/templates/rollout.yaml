@@ -1,0 +1,61 @@
+{{- if .Values.rollouts.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ include "network-security-mlops.fullname" . }}
+  labels:
+    {{- include "network-security-mlops.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      {{- include "network-security-mlops.selectorLabels" . | nindent 6 }}
+  strategy:
+    canary:
+      canaryService: {{ include "network-security-mlops.fullname" . }}-canary
+      stableService: {{ include "network-security-mlops.fullname" . }}
+      steps:
+        {{- toYaml .Values.rollouts.strategy.canary.steps | nindent 8 }}
+      analysis:
+        templates:
+          - templateName: {{ include "network-security-mlops.fullname" . }}-success-rate
+        startingStep: 2
+        args:
+          - name: service-name
+            value: {{ include "network-security-mlops.fullname" . }}-canary
+  template:
+    metadata:
+      labels:
+        {{- include "network-security-mlops.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "network-security-mlops.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "network-security-mlops.fullname" . }}-config
+          env:
+            - name: MONGO_DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "network-security-mlops.fullname" . }}-secrets
+                  key: MONGO_DB_URL
+                  optional: true
+{{- end }}

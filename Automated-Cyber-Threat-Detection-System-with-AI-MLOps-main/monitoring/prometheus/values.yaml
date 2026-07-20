@@ -1,0 +1,31 @@
+# Prometheus + Grafana Helm values for kube-prometheus-stack
+# Install: helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring -f values.yaml
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+grafana:
+  adminPassword: "" # Set via --set grafana.adminPassword=<password>
+  service:
+    type: LoadBalancer
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: custom
+          folder: "Network Security MLOps"
+          type: file
+          options:
+            path: /var/lib/grafana/dashboards/custom
+
+alertmanager:
+  enabled: true

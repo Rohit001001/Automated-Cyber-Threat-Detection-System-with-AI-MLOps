@@ -1,0 +1,31 @@
+# =============================================================================
+# Docker Compose — Local Development
+# =============================================================================
+# Usage:
+#   cp .env.example .env   (fill in your values)
+#   docker compose up --build
+# =============================================================================
+
+services:
+  app:
+    build: .
+    container_name: network-security-mlops
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGO_DB_URL=${MONGO_DB_URL}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - BUCKET_NAME=${BUCKET_NAME:-networksecurity3}
+      - PREDICTION_BUCKET_NAME=${PREDICTION_BUCKET_NAME:-network-security-prediction}
+      - MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI:-}
+      - MLFLOW_TRACKING_USERNAME=${MLFLOW_TRACKING_USERNAME:-}
+      - MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD:-}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped

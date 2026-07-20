@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+.Python
+
+# Virtual environments
+venv/
+env/
+.venv/
+network-security/
+
+# Environment variables & secrets
+.env
+*.env
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ML artifacts & logs
+Artifacts/
+logs/
+prediction/
+prediction_output/
+upload_data/
+valid_data/
+saved_models/
+
+# Large model files (should be in S3/model registry)
+final_model/*.pkl
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.tfplan
+
+# Docker
+docker-compose.override.yml
+
+# Helm
+helm/*/charts/
+
+# Security scan reports
+trivy-report.*
+checkov-report.*
+dependency-check-report.*
+sonar-project.properties
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
